@@ -1,0 +1,65 @@
+Short on funds for the festive season? Register for Hackathon and win cash rewards!  
+
+banner
+Given an array A of integers and another number K. Find all the unique quadruple from the given array that sums up to K.
+
+Also note that all the quadruples which you return should be internally sorted, ie for any quadruple [q1, q2, q3, q4] the following should follow: q1 <= q2 <= q3 <= q4.
+
+Example 1:
+
+Input:
+N = 5, K = 3
+A[] = {0,0,2,1,1}
+Output: 0 0 1 2 
+Explanation: Sum of 0, 0, 1, 2 is equal
+to K.
+
+
+
+
+def findQuadruples(A, K):
+    A.sort()
+    quadruples = []
+
+    for i in range(len(A) - 3):
+        # Skip duplicates
+        if i > 0 and A[i] == A[i - 1]:
+            continue
+
+        for j in range(i + 1, len(A) - 2):
+            # Skip duplicates
+            if j > i + 1 and A[j] == A[j - 1]:
+                continue
+
+            left = j + 1
+            right = len(A) - 1
+
+            while left < right:
+                total = A[i] + A[j] + A[left] + A[right]
+
+                if total == K:
+                    quadruples.append([A[i], A[j], A[left], A[right]])
+
+                    # Skip duplicates
+                    while left < right and A[left] == A[left + 1]:
+                        left += 1
+                    while left < right and A[right] == A[right - 1]:
+                        right -= 1
+
+                    left += 1
+                    right -= 1
+                elif total < K:
+                    left += 1
+                else:
+                    right -= 1
+
+    return quadruples
+
+# Example usage
+N = 5
+K = 3
+A = [0, 0, 2, 1, 1]
+
+result = findQuadruples(A, K)
+for quad in result:
+    print(quad)  # Output: [0, 0, 1, 2]
